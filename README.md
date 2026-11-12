@@ -1,5 +1,7 @@
 # Tricera360
 
+<img width="1489" height="1045" alt="image" src="https://github.com/user-attachments/assets/c2f40ffb-b28c-4e74-902d-af58c40a63ea" />
+
 Use DualShock 4 and DualSense controllers as virtual Xbox 360 controllers on Windows.
 
 Tricera360 is a portable Windows x64 app. It reads DualShock 4, DualSense, and DualSense Edge controllers over USB or Bluetooth and maps their inputs to virtual Xbox 360 controllers. It is useful for games that recognize Xbox controllers and miss the original PlayStation pad.
