@@ -1,0 +1,293 @@
+<Window x:Class="Tricera360.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Tricera360"
+        Title="Tricera360" Width="1010" Height="785" MinWidth="800" MinHeight="620"
+        WindowStartupLocation="CenterScreen" FontFamily="Inter, Segoe UI" FontSize="13"
+        Background="{StaticResource WindowBackground}" Foreground="{StaticResource Text}"
+        UseLayoutRounding="True">
+    <Grid Margin="24,20,24,13">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Margin="0,0,0,17">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <DockPanel Margin="0,0,14,0" VerticalAlignment="Center">
+                <Image DockPanel.Dock="Left" Source="{StaticResource DinoBrand}" Width="56" Height="56" Margin="0,0,10,0"/>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Tricera360" FontSize="28" FontWeight="Bold" Foreground="{StaticResource Brand}"/>
+                    <TextBlock Text="DualShock 4 and DualSense → Xbox 360 input" Margin="0,3,0,0"
+                               Foreground="{StaticResource Secondary}" TextWrapping="Wrap"/>
+                </StackPanel>
+            </DockPanel>
+            <Border Grid.Column="1" VerticalAlignment="Center" Margin="0,0,10,0"
+                    CornerRadius="8" Background="{StaticResource Well}" Padding="12,8" BorderThickness="1"
+                    BorderBrush="{StaticResource Border}">
+                <TextBlock x:Name="Summary" Foreground="{StaticResource Accent}"
+                           Text="0 Xbox outputs" FontWeight="SemiBold"
+                           ToolTip="XInput games can see four player slots. Additional Xbox devices require game support."/>
+            </Border>
+            <Button x:Name="PauseButton" Grid.Column="2" Content="Pause outputs"
+                    VerticalAlignment="Center" Click="ToggleOutputs"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="225"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Border}"
+                    BorderThickness="1" CornerRadius="14" Padding="13">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="ControllersHeading" Text="Controllers" FontWeight="SemiBold" FontSize="16"
+                               Margin="3,1,0,11"/>
+                    <ListBox x:Name="ControllerList" Grid.Row="1" Background="Transparent"
+                             BorderThickness="0" SelectionChanged="SelectController"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             AutomationProperties.Name="Connected controllers">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="Margin" Value="0,0,0,7"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border x:Name="Row" CornerRadius="8" Padding="11,10"
+                                                    BorderBrush="{StaticResource Border}" BorderThickness="1"
+                                                    Background="{StaticResource Well}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="Row" Property="Background" Value="{StaticResource Selected}"/>
+                                                    <Setter TargetName="Row" Property="BorderBrush" Value="{StaticResource SelectedBorder}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Row" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                                    <Setter TargetName="Row" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="{Binding Caption}" Margin="0,4,0,0"
+                                               FontSize="12" Foreground="{StaticResource Secondary}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="{Binding LayoutName}" Margin="0,3,0,0"
+                                               FontSize="12" Foreground="{StaticResource ProfileAccent}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Grid.Row="2" Content="Windows Game Controllers" Margin="0,9,0,0"
+                            Click="OpenWindowsTest" HorizontalAlignment="Stretch"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="2" Background="{StaticResource Panel}" BorderBrush="{StaticResource Border}"
+                    BorderThickness="1" CornerRadius="14" Padding="17,15">
+                <Grid>
+                    <StackPanel x:Name="EmptyDetail" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ContentControl ContentTemplate="{StaticResource DinoIdle}" Width="92" Height="92"
+                                        Focusable="False" IsHitTestVisible="False"/>
+                        <TextBlock Text="Waiting for a controller" FontSize="21" FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Turn on a paired DualSense or DualShock 4, or plug one in over USB."
+                                   TextWrapping="Wrap" TextAlignment="Center" MaxWidth="290"
+                                   Foreground="{StaticResource Secondary}" Margin="0,8,0,0"/>
+                    </StackPanel>
+                    <Grid x:Name="Detail" Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                            <Grid Margin="0,0,0,11">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock x:Name="DetailName" FontSize="22" FontWeight="SemiBold"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock x:Name="LinkMode" Foreground="{StaticResource Secondary}"
+                                               FontSize="12" Margin="0,3,0,0"/>
+                                </StackPanel>
+                                <CheckBox x:Name="OutputEnabled" Grid.Column="1" Content="Xbox output"
+                                          VerticalAlignment="Center" Click="ChangeProfile"
+                                          ToolTip="Create a virtual Xbox 360 controller for this pad."/>
+                            </Grid>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel Margin="0,0,12,0">
+                            <Border x:Name="StatusCard" Background="{StaticResource Well}" BorderBrush="{StaticResource Border}"
+                                    BorderThickness="1" CornerRadius="9" Padding="8,5,12,5" Margin="0,0,0,13">
+                                <DockPanel>
+                                    <ContentControl x:Name="PadArt" DockPanel.Dock="Left" Width="45" Height="45" Margin="0,0,8,0"
+                                                    Focusable="False" IsHitTestVisible="False"/>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock x:Name="InputStatus" FontWeight="SemiBold" TextWrapping="Wrap"
+                                                   AutomationProperties.LiveSetting="Polite"/>
+                                        <TextBlock x:Name="StatusDetail" Foreground="{StaticResource Secondary}" FontSize="12"
+                                                   Margin="0,3,0,0" TextWrapping="Wrap"/>
+                                        <TextBlock x:Name="DriverLink" Visibility="Collapsed" Margin="0,6,0,0" FontSize="12">
+                                            <Hyperlink Foreground="{StaticResource Accent}" Click="OpenDriverReleases">Download ViGEmBus</Hyperlink>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Layout" VerticalAlignment="Center" Margin="0,0,9,0"/>
+                                <ComboBox x:Name="LayoutPicker" Grid.Column="1" MinHeight="28"
+                                          SelectedValuePath="Id" SelectionChanged="ChangeLayout"
+                                          AutomationProperties.Name="Controller layout">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" Foreground="{StaticResource Text}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <Button x:Name="LayoutAction" Grid.Column="2" Content="New profile…" Margin="8,0,0,0" Foreground="{StaticResource ProfileAccent}"
+                                        Click="OpenLayoutEditor"/>
+                            </Grid>
+                            <TextBlock x:Name="LayoutNote" FontSize="12" Margin="0,0,0,9"
+                                       TextWrapping="Wrap" Foreground="{StaticResource Secondary}"/>
+                            <WrapPanel Margin="0,1,0,8">
+                                <TextBlock Text="Invert physical sticks" FontWeight="SemiBold" Margin="0,3,16,3"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,3,16,3">
+                                    <TextBlock Text="Left" Foreground="{StaticResource Secondary}" Margin="0,0,7,0"/>
+                                    <CheckBox x:Name="InvertLeftX" Content="X" Click="ChangeProfile" Margin="0,0,9,0" AutomationProperties.Name="Invert physical left stick X"/>
+                                    <CheckBox x:Name="InvertLeftY" Content="Y" Click="ChangeProfile" AutomationProperties.Name="Invert physical left stick Y"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,3,0,3">
+                                    <TextBlock Text="Right" Foreground="{StaticResource Secondary}" Margin="0,0,7,0"/>
+                                    <CheckBox x:Name="InvertRightX" Content="X" Click="ChangeProfile" Margin="0,0,9,0" AutomationProperties.Name="Invert physical right stick X"/>
+                                    <CheckBox x:Name="InvertRightY" Content="Y" Click="ChangeProfile" AutomationProperties.Name="Invert physical right stick Y"/>
+                                </StackPanel>
+                            </WrapPanel>
+                            <TextBlock Text="Xbox stick preview" FontSize="14" FontWeight="SemiBold" Margin="0,1,0,7"/>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Background="{StaticResource Well}" CornerRadius="8" Padding="10,8">
+                                    <StackPanel>
+                                        <TextBlock Text="Xbox left stick" FontWeight="SemiBold"/>
+                                        <TextBlock x:Name="LeftStickSource" Text="Physical left" FontSize="11" Foreground="{StaticResource Secondary}" Margin="0,2,0,0"/>
+                                        <local:StickDisplay x:Name="LeftStick" Height="82" Margin="0,2,0,1"/>
+                                        <TextBlock x:Name="LeftValues" Text="X  0.00    Y  0.00"
+                                                   Foreground="{StaticResource Secondary}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Grid.Column="2" Background="{StaticResource Well}" CornerRadius="8" Padding="10,8">
+                                    <StackPanel>
+                                        <TextBlock Text="Xbox right stick" FontWeight="SemiBold"/>
+                                        <TextBlock x:Name="RightStickSource" Text="Physical right" FontSize="11" Foreground="{StaticResource Secondary}" Margin="0,2,0,0"/>
+                                        <local:StickDisplay x:Name="RightStick" Height="82" Margin="0,2,0,1"/>
+                                        <TextBlock x:Name="RightValues" Text="X  0.00    Y  0.00"
+                                                   Foreground="{StaticResource Secondary}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                            <TextBlock Text="Live buttons and triggers" FontSize="14" FontWeight="SemiBold" Margin="0,1,0,7"/>
+                            <Grid Margin="0,0,0,9">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Margin="3,0,3,0">
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock x:Name="LeftTriggerValue" DockPanel.Dock="Right"
+                                                   Foreground="{StaticResource Secondary}" Text="0%"/>
+                                        <TextBlock x:Name="LeftTriggerLabel" Text="L2 → LT"/>
+                                    </DockPanel>
+                                    <ProgressBar x:Name="LeftTrigger"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="3,0,3,0">
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock x:Name="RightTriggerValue" DockPanel.Dock="Right"
+                                                   Foreground="{StaticResource Secondary}" Text="0%"/>
+                                        <TextBlock x:Name="RightTriggerLabel" Text="R2 → RT"/>
+                                    </DockPanel>
+                                    <ProgressBar x:Name="RightTrigger"/>
+                                </StackPanel>
+                            </Grid>
+                            <UniformGrid x:Name="Buttons" Columns="5" Margin="0,0,0,9"
+                                         AutomationProperties.Name="Live button input"/>
+                            <Border BorderBrush="{StaticResource Border}" BorderThickness="0,1,0,0"
+                                    Padding="0,10,0,1">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Controller name" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBox x:Name="NameBox" Grid.Column="1" MaxLength="36"
+                                                 KeyDown="NameKeyDown" TextChanged="NameChanged"
+                                                 AutomationProperties.Name="Controller name"/>
+                                        <Button x:Name="SaveName" Grid.Column="2" Content="Save"
+                                                Margin="7,0,0,0" Padding="10,5" Click="SaveControllerName"/>
+                                    </Grid>
+                                    <WrapPanel Margin="0,9,0,0">
+                                        <TextBlock Text="Stick deadzone" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <ComboBox x:Name="Deadzone" Width="65" Margin="0,0,18,0"
+                                                  AutomationProperties.Name="Stick deadzone"
+                                                  SelectionChanged="ChangeDeadzone">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Label}" Foreground="{StaticResource Text}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+        <DockPanel Grid.Row="2" Margin="0,10,0,0">
+            <Button DockPanel.Dock="Right" Content="Open log" Click="OpenLog" Padding="10,5"
+                    ToolTip="Open the current diagnostic log in Notepad." Margin="12,0,0,0"/>
+            <ContentControl x:Name="FooterArt" DockPanel.Dock="Left" Width="29" Height="29" Margin="0,0,7,0"
+                            Focusable="False" IsHitTestVisible="False" Visibility="Collapsed"/>
+            <TextBlock x:Name="Footer" VerticalAlignment="Center" Foreground="{StaticResource Secondary}"
+                       FontSize="12" TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite"/>
+        </DockPanel>
+    </Grid>
+</Window>

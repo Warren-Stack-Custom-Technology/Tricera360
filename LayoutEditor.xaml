@@ -1,0 +1,72 @@
+<Window x:Class="Tricera360.LayoutEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Controller layout" Width="530" Height="675" MinWidth="450" MinHeight="460"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{StaticResource WindowBackground}" Foreground="{StaticResource Text}"
+        FontFamily="Inter, Segoe UI" FontSize="13" UseLayoutRounding="True">
+    <Window.Resources>
+        <DataTemplate x:Key="OutputOption">
+            <TextBlock Text="{Binding Label}" Foreground="{StaticResource Text}" TextTrimming="CharacterEllipsis"/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock x:Name="Heading" FontSize="22" FontWeight="Bold" TextWrapping="Wrap"/>
+            <TextBlock Text="Choose which Xbox input each PlayStation control sends to the game."
+                       TextWrapping="Wrap" Foreground="{StaticResource Secondary}" Margin="0,4,0,12"/>
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Layout name" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <TextBox x:Name="LayoutName" Grid.Column="1" MaxLength="36" AutomationProperties.Name="Layout name"/>
+            <Button Grid.Column="2" Content="Swap L1/L2 and R1/R2" Click="SwapShoulders" Margin="9,0,0,0"
+                    ToolTip="Swap the current Xbox assignments within each shoulder and trigger pair."/>
+        </Grid>
+        <CheckBox x:Name="SwapSticks" Grid.Row="2" Content="Swap left and right stick axes" Margin="0,0,0,12"
+                  ToolTip="Swap both axes of each stick. Stick clicks are assigned separately below."/>
+        <Grid Grid.Row="3" Margin="10,0,20,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="PlayStation control" FontWeight="SemiBold"/>
+            <TextBlock Grid.Column="1" Text="Xbox output" FontWeight="SemiBold" Foreground="{StaticResource Accent}"/>
+        </Grid>
+        <Border Grid.Row="4" CornerRadius="8" Background="{StaticResource Panel}"
+                BorderBrush="{StaticResource Border}" BorderThickness="1" Padding="6">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="MappingRows" Margin="0,0,8,0"/>
+            </ScrollViewer>
+        </Border>
+        <StackPanel Grid.Row="5" Margin="0,11,0,0">
+            <TextBlock Text="A trigger mapped to a button activates at half pull. A button mapped to a trigger sends a full pull."
+                       TextWrapping="Wrap" Foreground="{StaticResource Secondary}" FontSize="12"/>
+            <DockPanel x:Name="ErrorPanel" Visibility="Collapsed" Margin="0,6,0,0">
+                <ContentControl DockPanel.Dock="Left" ContentTemplate="{StaticResource DinoError}" Width="30" Height="30"
+                                Focusable="False" IsHitTestVisible="False" Margin="0,0,6,0"/>
+                <TextBlock x:Name="ErrorText" TextWrapping="Wrap" VerticalAlignment="Center"
+                           Foreground="{StaticResource Warning}" AutomationProperties.LiveSetting="Polite"/>
+            </DockPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                <Button Content="Cancel" IsCancel="True"/>
+                <Button x:Name="SaveCopy" Content="Save as new" Click="SaveNew" Margin="7,0,0,0"/>
+                <Button x:Name="SaveExisting" Content="Save changes" Click="SaveUpdate" Margin="7,0,0,0"
+                        ToolTip="Update every controller assigned to this saved layout."
+                        Background="{StaticResource ActiveBg}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

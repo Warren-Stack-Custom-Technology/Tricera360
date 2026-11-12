@@ -1,0 +1,6 @@
+bin/
+obj/
+.vs/
+Profiles/
+Tricera360-*.log
+*.user
