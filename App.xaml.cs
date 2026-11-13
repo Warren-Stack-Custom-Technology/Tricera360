@@ -12,9 +12,9 @@ public partial class App : Application
     private Mutex? _instance;
     private bool _ownsInstance;
 
-    internal static void ApplyDarkTitleBar(Window window)
+    internal static void ApplyTitleBar(Window window)
     {
-        int dark = 1;
+        int dark = AppTheme.Current.IsLight ? 0 : 1;
         DwmSetWindowAttribute(new WindowInteropHelper(window).Handle, 20, ref dark, sizeof(int));
     }
 

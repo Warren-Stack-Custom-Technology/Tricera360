@@ -30,13 +30,19 @@ public partial class MainWindow : Window
     private string? _statusArt;
     private string? _footerArt;
     private string? _notice;
+    private string? _noticeArt;
     private long _noticeUntil;
     private const string TrayMessage = "Minimize to keep running in the notification area. Close to release Xbox outputs.";
 
     public MainWindow()
     {
+        AppTheme theme = AppTheme.Load();
+        theme.Apply();
         InitializeComponent();
         _bridge = new BridgeManager();
+        ThemePicker.ItemsSource = AppTheme.Choices;
+        ThemePicker.SelectedItem = theme;
+        ThemePicker.SelectionChanged += ChangeTheme;
         RefreshLayoutOptions(null);
         CreateButtonMonitor();
         Deadzone.ItemsSource = Enumerable.Range(0, 7)
@@ -45,7 +51,23 @@ public partial class MainWindow : Window
         _timer = new DispatcherTimer(DispatcherPriority.Background) { Interval = TimeSpan.FromMilliseconds(45) };
         _timer.Tick += (_, _) => RefreshView();
         Loaded += (_, _) => { CreateTray(); _timer.Start(); RefreshView(); };
-        SourceInitialized += (_, _) => App.ApplyDarkTitleBar(this);
+        SourceInitialized += (_, _) => App.ApplyTitleBar(this);
+    }
+
+    private void ChangeTheme(object sender, SelectionChangedEventArgs e)
+    {
+        if (ThemePicker.SelectedItem is not AppTheme theme) return;
+        theme.Apply();
+        App.ApplyTitleBar(this);
+        LeftStick.InvalidateVisual();
+        RightStick.InvalidateVisual();
+        if (!theme.TrySave())
+        {
+            _notice = "Theme could not be saved to the Profiles folder.";
+            _noticeArt = "DinoError";
+            _noticeUntil = Environment.TickCount64 + 5000;
+        }
+        RefreshView();
     }
 
     private void CreateButtonMonitor()
@@ -67,9 +89,10 @@ public partial class MainWindow : Window
             Border surface = new()
             {
                 CornerRadius = new CornerRadius(5), Margin = new Thickness(2, 2, 2, 2),
-                Height = 25, Child = label, BorderThickness = new Thickness(1),
-                BorderBrush = Brush("Border"), Background = Brush("Well")
+                Height = 25, Child = label, BorderThickness = new Thickness(1)
             };
+            surface.SetResourceReference(Border.BorderBrushProperty, "Border");
+            surface.SetResourceReference(Border.BackgroundProperty, "Well");
             Buttons.Children.Add(surface);
             _buttons[button] = (surface, label);
         }
@@ -181,7 +204,7 @@ public partial class MainWindow : Window
         bool showNotice = _notice is not null && Environment.TickCount64 < _noticeUntil;
         Footer.Text = error ?? (showNotice ? _notice! : TrayMessage);
         Footer.Foreground = Brush(error is null ? "Secondary" : "Warning");
-        string? art = error is not null ? "DinoError" : showNotice ? "DinoSuccess" : null;
+        string? art = error is not null ? "DinoError" : showNotice ? _noticeArt : null;
         if (_footerArt == art) return;
         _footerArt = art;
         FooterArt.Visibility = art is null ? Visibility.Collapsed : Visibility.Visible;
@@ -293,6 +316,7 @@ public partial class MainWindow : Window
             RefreshLayoutOptions(_selectedSettings?.LayoutId);
         }
         _notice = $"Layout saved · {saved.Name}";
+        _noticeArt = "DinoSuccess";
         _noticeUntil = Environment.TickCount64 + 5000;
         UpdateFooter();
     }

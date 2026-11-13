@@ -8,9 +8,6 @@
                 <GeometryDrawing Brush="#AAC781" Geometry="M16,31 Q19,23 29,23 Q37,24 40,31 L46,35 Q51,39 47,44 Q41,51 26,47 Q15,44 16,31 Z"/>
                 <GeometryDrawing Brush="#F3E9C1" Geometry="M25,27 L23,15 Q24,11 26,14 L33,25 Z M35,26 L35,16 Q36,13 38,16 L42,29 Z M44,35 L49,29 Q51,29 50,32 L48,39 Z"/>
                 <GeometryDrawing Brush="#17251B" Geometry="M29,33 A2.4,2.4 0 1 0 29,37.8 A2.4,2.4 0 1 0 29,33 Z M39,33 A2,2 0 1 0 39,37 A2,2 0 1 0 39,33 Z M40,41 Q44,43 47,40 Q45,46 40,44 Z"/>
-                <GeometryDrawing Brush="#59E7EC" Geometry="M15,49 H26 V51 H15 Z"/>
-                <GeometryDrawing Brush="#F081C4" Geometry="M28,49 H37 V51 H28 Z"/>
-                <GeometryDrawing Brush="#EBF78E" Geometry="M39,49 H48 V51 H39 Z"/>
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>

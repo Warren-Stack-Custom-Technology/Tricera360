@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace Tricera360;
 
@@ -17,7 +16,7 @@ public partial class LayoutEditor : Window
     internal LayoutEditor(BridgeManager bridge, InputLayout source, PadModel model)
     {
         InitializeComponent();
-        SourceInitialized += (_, _) => App.ApplyDarkTitleBar(this);
+        SourceInitialized += (_, _) => App.ApplyTitleBar(this);
         _bridge = bridge;
         _source = source;
         SwapSticks.IsChecked = source.SwapSticks;
@@ -27,7 +26,7 @@ public partial class LayoutEditor : Window
             SaveExisting.Visibility = Visibility.Collapsed;
             SaveCopy.Content = "Save and assign";
             SaveCopy.IsDefault = true;
-            SaveCopy.Background = (Brush)FindResource("ActiveBg");
+            SaveCopy.SetResourceReference(Control.BackgroundProperty, "ActiveBg");
         }
         else
         {

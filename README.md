@@ -9,7 +9,7 @@ Tricera360 is a portable Windows x64 app. It reads DualShock 4, DualSense, and D
 ## Getting started
 
 1. Install [ViGEmBus](https://github.com/nefarius/ViGEmBus/releases) if it is missing.
-2. Download `Tricera360-v0.6.0-win-x64.zip` from [GitHub Releases](https://github.com/Warren-Stack-Custom-Technology/Tricera360/releases/latest), then extract it into a writable folder.
+2. Download the `win-x64.zip` release asset from [GitHub Releases](https://github.com/Warren-Stack-Custom-Technology/Tricera360/releases/latest), then extract it into a writable folder.
 3. Run `Tricera360.exe` and connect your controllers by Bluetooth or USB. The Xbox output activates when the app receives input.
 4. Select a controller to preview input, assign a layout, or turn its Xbox output off if the game already reads the physical pad.
 
@@ -19,6 +19,7 @@ The portable ZIP contains an unsigned executable. Windows SmartScreen may displa
 
 - **Default** is read-only. Create custom button and trigger mappings, swap the two stick axes, or invert either physical stick axis per controller. The Xbox preview reflects the mapped stick output.
 - The `Profiles` folder lives beside the executable. Copy the app folder to take your layouts with you. Windows can identify the same physical controller differently on another PC, so it may need its layout assigned again.
+- Use **Theme** at the bottom of the window to switch between Green, Yellow, Brown, Purple / Magenta, Black, and White. The selected theme is saved in `Profiles`.
 - Tricera360 can create up to eight virtual devices. XInput addresses four controllers. Playing with five to eight requires a game that supports additional controllers through another input API.
 
 ## Build and test
