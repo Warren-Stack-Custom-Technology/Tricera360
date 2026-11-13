@@ -1,6 +1,6 @@
 # Tricera360
 
-<img width="1489" height="1045" alt="image" src="https://github.com/user-attachments/assets/c2f40ffb-b28c-4e74-902d-af58c40a63ea" />
+<img width="578" height="452" alt="image" src="https://github.com/user-attachments/assets/187cebb4-3dc2-4bf5-9ef3-a94e3310796f" />
 
 Use DualShock 4 and DualSense controllers as virtual Xbox 360 controllers on Windows.
 
