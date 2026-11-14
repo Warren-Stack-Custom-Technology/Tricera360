@@ -33,6 +33,8 @@ dotnet publish Tricera360.csproj -c Release -r win-x64 --self-contained true -p:
 
 To test virtual device creation on Windows, quit Tricera360 and run `.\Tricera360.exe --test-outputs` from the folder containing the executable. The test reports how many virtual devices accepted input and how many got XInput slots. Close the result dialog to disconnect the test devices.
 
+[Optional donation](https://www.buymeacoffee.com/WarrenStack)
+
 ## License
 
 Tricera360 is released under the [MIT License](LICENSE). Notices and terms for bundled dependencies are in [Licenses](Licenses/).

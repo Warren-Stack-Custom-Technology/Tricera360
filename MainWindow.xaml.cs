@@ -33,6 +33,7 @@ public partial class MainWindow : Window
     private string? _noticeArt;
     private long _noticeUntil;
     private const string TrayMessage = "Minimize to keep running in the notification area. Close to release Xbox outputs.";
+    private const string DonationPage = "https://www.buymeacoffee.com/WarrenStack";
 
     public MainWindow()
     {
@@ -368,6 +369,15 @@ public partial class MainWindow : Window
         {
             DiagnosticLog.Session.Error("WINDOWS_TEST_OPEN_FAILED", error: error);
             MessageBox.Show(this, "Windows Game Controllers could not open. See the diagnostic log.", "Tricera360");
+        }
+    }
+
+    private void OpenDonationPage(object sender, RoutedEventArgs e)
+    {
+        try { Process.Start(new ProcessStartInfo(DonationPage) { UseShellExecute = true }); }
+        catch (Win32Exception error)
+        {
+            MessageBox.Show(this, $"Could not open the donation page.\n\n{DonationPage}\n\n{error.Message}", "Tricera360");
         }
     }
 
