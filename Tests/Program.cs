@@ -246,6 +246,7 @@ Check(targets.TrueForAll(target => target.Closed), "Shutdown releases every outp
 using var missingDriver = new OutputHub(() => throw new XboxDriverSetupException(new IOException()));
 Check(missingDriver.Send("pad", frame).Issue == OutputIssue.DriverSetup, "Driver errors request ViGEmBus setup");
 Console.WriteLine("Passed HID reports, four-axis inversion, stick swapping, portable migration, eight-pad slot handling, driver status, and logging.");
+await UpdatePackageTests.RunAsync();
 
 static void Check(bool condition, string detail)
 {

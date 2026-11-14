@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,11 +18,13 @@ public partial class MainWindow : Window
 {
     private readonly BridgeManager _bridge;
     private readonly DispatcherTimer _timer;
+    private readonly CancellationTokenSource _updateCancellation = new();
     private readonly Dictionary<PadControl, (Border Surface, TextBlock Label)> _buttons = new();
     private Row[] _rows = [];
     private Forms.NotifyIcon? _tray;
     private Forms.ToolStripMenuItem? _trayPause;
     private System.Drawing.Icon? _trayIcon;
+    private bool _closed;
     private bool _syncing;
     private string? _selectedId;
     private PadSettings? _selectedSettings;
@@ -35,7 +38,7 @@ public partial class MainWindow : Window
     private const string TrayMessage = "Minimize to keep running in the notification area. Close to release Xbox outputs.";
     private const string DonationPage = "https://www.buymeacoffee.com/WarrenStack";
 
-    public MainWindow()
+    internal MainWindow(bool skipUpdate)
     {
         AppTheme theme = AppTheme.Load();
         theme.Apply();
@@ -53,6 +56,38 @@ public partial class MainWindow : Window
         _timer.Tick += (_, _) => RefreshView();
         Loaded += (_, _) => { CreateTray(); _timer.Start(); RefreshView(); };
         SourceInitialized += (_, _) => App.ApplyTitleBar(this);
+        if (PortableUpdater.Available)
+        {
+            AutoUpdateToggle.Visibility = Visibility.Visible;
+            AutoUpdateToggle.IsChecked = PortableUpdater.ReadPreference() == true;
+            if (!skipUpdate) ContentRendered += StartUpdateCheck;
+        }
+    }
+
+    private async void StartUpdateCheck(object? sender, EventArgs e)
+    {
+        ContentRendered -= StartUpdateCheck;
+        bool? enabled = PortableUpdater.ReadPreference();
+        if (enabled is null)
+        {
+            bool accept = new UpdatePreferenceDialog { Owner = this }.ShowDialog() == true;
+            enabled = PortableUpdater.SavePreference(accept) && accept;
+            AutoUpdateToggle.IsChecked = enabled;
+        }
+
+        if (enabled == true && !_closed && await PortableUpdater.StageAndLaunchAsync(
+                () => Application.Current.Windows.Count == 1 && !_bridge.Snapshot().Any(pad => pad.Output.Active),
+                _updateCancellation.Token))
+            Close();
+    }
+
+    private void ChangeAutoUpdate(object sender, RoutedEventArgs e)
+    {
+        if (!PortableUpdater.SavePreference(AutoUpdateToggle.IsChecked == true))
+        {
+            AutoUpdateToggle.IsChecked = PortableUpdater.ReadPreference() == true;
+            MessageBox.Show(this, "Could not save the update choice in the Profiles folder.", "Tricera360");
+        }
     }
 
     private void ChangeTheme(object sender, SelectionChangedEventArgs e)
@@ -450,6 +485,9 @@ public partial class MainWindow : Window
 
     protected override void OnClosed(EventArgs e)
     {
+        _closed = true;
+        _updateCancellation.Cancel();
+        _updateCancellation.Dispose();
         _timer.Stop();
         if (_tray is not null)
         {

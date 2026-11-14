@@ -8,11 +8,16 @@
     <Nullable>enable</Nullable>
     <ApplicationIcon>Assets/Controller.ico</ApplicationIcon>
     <AssemblyName>Tricera360</AssemblyName>
-    <Version>0.6.1</Version>
+    <Version>0.6.3</Version>
     <Company>Warren Stack Custom Technology</Company>
     <DebugType>none</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(PublishSingleFile)' == 'true' And '$(RuntimeIdentifier)' == 'win-x64' And '$(SelfContained)' == 'true'">
+    <DefineConstants>$(DefineConstants);TRICERA_PORTABLE</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Assets/UpdatePublicKey.xml" LogicalName="Tricera360.UpdatePublicKey"
+                      Condition="Exists('Assets/UpdatePublicKey.xml')" />
     <PackageReference Include="HidSharp" Version="2.6.4" />
     <PackageReference Include="Nefarius.ViGEm.Client" Version="1.21.256" />
     <Compile Remove="Tests/**/*.cs" />

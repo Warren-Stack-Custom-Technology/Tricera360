@@ -24,6 +24,11 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        if (e.Args is ["--apply-update", string staging, string parent] && int.TryParse(parent, out int parentId))
+        {
+            Shutdown(PortableUpdater.Apply(staging, parentId));
+            return;
+        }
         // Share the lock with earlier releases so only one bridge can run at a time.
         _instance = new Mutex(true, @"Local\DS5Windows.ControllerBridge", out _ownsInstance);
         if (!_ownsInstance)
@@ -43,7 +48,9 @@ public partial class App : Application
             Shutdown(OutputProbe.Run());
             return;
         }
-        MainWindow = new MainWindow();
+        MainWindow = new MainWindow(skipUpdate: e.Args is ["--skip-update"] or ["--updated", _]);
+        if (e.Args is ["--updated", string ready])
+            MainWindow.ContentRendered += (_, _) => PortableUpdater.SignalReady(ready);
         MainWindow.Show();
     }
 

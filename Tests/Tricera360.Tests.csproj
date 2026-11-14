@@ -11,5 +11,6 @@
     <Compile Include="../LayoutStore.cs" Link="LayoutStore.cs" />
     <Compile Include="../OutputHub.cs" Link="OutputHub.cs" />
     <Compile Include="../DiagnosticLog.cs" Link="DiagnosticLog.cs" />
+    <Compile Include="../UpdatePackage.cs" Link="UpdatePackage.cs" />
   </ItemGroup>
 </Project>

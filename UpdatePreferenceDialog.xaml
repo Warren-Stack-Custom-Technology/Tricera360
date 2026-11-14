@@ -1,0 +1,22 @@
+<Window x:Class="Tricera360.UpdatePreferenceDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Tricera360 updates" Width="430" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource WindowBackground}" Foreground="{DynamicResource Text}"
+        FontFamily="Inter, Segoe UI" FontSize="13" UseLayoutRounding="True"
+        FocusManager.FocusedElement="{Binding ElementName=KeepManual}">
+    <StackPanel Margin="22,18,22,20">
+        <TextBlock Text="Automatic updates" FontSize="21" FontWeight="Bold"/>
+        <TextBlock Margin="0,8,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Secondary}"
+                   Text="Tricera360 can install new releases when it opens. It may briefly close and reopen to finish an update."/>
+        <TextBlock Margin="0,5,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Secondary}"
+                   Text="You can change this anytime in the controller sidebar."/>
+        <StackPanel Margin="0,18,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="KeepManual" Content="Keep manual updates" IsCancel="True" IsDefault="True"
+                    Background="Transparent"/>
+            <Button Content="Enable automatic updates" Click="EnableUpdates" Margin="8,0,0,0"
+                    Background="{DynamicResource ActiveBg}" BorderBrush="{DynamicResource SelectedBorder}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

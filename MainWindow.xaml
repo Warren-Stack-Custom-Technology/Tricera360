@@ -105,9 +105,12 @@
                     </ListBox>
                     <StackPanel Grid.Row="2" Margin="0,9,0,0">
                         <Button Content="Windows Game Controllers" Click="OpenWindowsTest"/>
-                        <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="12">
-                            <Hyperlink Foreground="{DynamicResource Secondary}" Click="OpenDonationPage">Optional donation</Hyperlink>
-                        </TextBlock>
+                        <CheckBox x:Name="AutoUpdateToggle" Content="Automatic updates" Margin="0,10,0,0"
+                                  Visibility="Collapsed" Click="ChangeAutoUpdate"/>
+                        <Button Content="Optional donation" Click="OpenDonationPage" HorizontalAlignment="Center"
+                                Margin="0,8,0,0" Padding="10,4" FontSize="12" FontWeight="Normal"
+                                Background="Transparent" Foreground="{DynamicResource Secondary}"
+                                ToolTip="Open the donation page in your browser"/>
                     </StackPanel>
                 </Grid>
             </Border>

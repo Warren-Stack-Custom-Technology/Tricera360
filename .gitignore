@@ -4,3 +4,4 @@ obj/
 Profiles/
 Tricera360-*.log
 *.user
+.tricera360-update-*/

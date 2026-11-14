@@ -21,7 +21,9 @@ internal sealed record PadSettings(string Name, bool Enabled = true, int Deadzon
 
 internal sealed class SettingsStore
 {
-    internal static string DefaultDirectory { get; } = Path.Combine(AppContext.BaseDirectory, "Profiles");
+    internal static string InstallDirectory { get; } =
+        Path.GetDirectoryName(Environment.ProcessPath) ?? AppContext.BaseDirectory;
+    internal static string DefaultDirectory { get; } = Path.Combine(InstallDirectory, "Profiles");
     private static string LegacyDirectory { get; } = Path.Combine(Environment.GetFolderPath(
         Environment.SpecialFolder.LocalApplicationData), "DS5Windows");
     private readonly string _path;
